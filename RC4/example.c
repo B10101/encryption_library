@@ -23,26 +23,35 @@ void printbin(int8 *input,const int16 size){
 }
 
 int main(){
-    //Arcfour *rc4;
+    Arcfour *rc4;
     int16 bkey, btext;
-    char *key, *from, *encrypted, *decrypted; 
+    char *key, *from;
+    int8 *encrypted, *decrypted;
 
-    key = from = encrypted = decrypted = 0;
-    from = key;
-    bkey = btext = 0;
-
+    
     key = "yomatoes";
     bkey = strlen(key);
     from = "Eh mungu nguvu yetu";
     btext = strlen(from);
 
     printf("Initializing the encryption");
-    //rc4 = rc4init(key, bkey);
+    rc4 = rc4init((int8 *)key, bkey);
     printf("done\n");
 
     printf("'%s'\n ->", from);
-    //encrypted =rc4encrypt(from, btext);
-    printbin((int8 *)key,bkey);
+    encrypted =rc4encrypt(rc4, (int8 *)from, btext);
+    printbin((int8 *)encrypted,btext);
+    rc4uninit(rc4);
+
+
+    printf("Initializing the decryption \n");
+    rc4 = rc4init((int8 *)key, bkey);
+    printf("done\n");
+
+   
+    decrypted =rc4decrypt(rc4, (int8 *)encrypted, btext);
+    printf("  ->'%s'\n ->", decrypted);
+    rc4uninit(rc4);
 
     return 0;
 }
